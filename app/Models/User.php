@@ -2,48 +2,71 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    protected $table = 'users';
+    protected $primaryKey = 'user_id';
     protected $fillable = [
-        'name',
-        'email',
+        'user_name',
+        'user_email',
         'password',
+        'business_name',
+        'nib',
+        'nib_document',
+        'business_address',
+        'business_category'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'password'
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function clientContracts()
+    {
+        return $this->hasMany(
+            Contract::class,
+            'client_id',
+            'user_id'
+        );
+    }
+
+    public function vendorContracts()
+    {
+        return $this->hasMany(
+            Contract::class,
+            'vendor_id',
+            'user_id'
+        );
+    }
+
+    public function contractVersions()
+    {
+        return $this->hasMany(
+            ContractVersion::class,
+            'created_by',
+            'user_id'
+        );
+    }
+
+    public function contractLogs()
+    {
+        return $this->hasMany(
+            ContractLog::class,
+            'pelaku_id',
+            'user_id'
+        );
     }
 }
