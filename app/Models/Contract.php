@@ -12,23 +12,29 @@ class Contract extends Model
 
     protected $fillable = [
         'contract_name',
-        'barang',
-        'jumlah_barang',
-        'harga',
+        'contract_template',
+        'description',
+        'items',
         'jadwal_kirim',
+        'delivery_time',
+        'delivery_address',
+        'delivery_notes',
         'start_date',
         'end_date',
+        'payment_due_date',
         'syarat_bayar',
+        'penalty_clause',
     ];
 
     protected function casts(): array
     {
         return [
-            'harga' => 'decimal:2',
+            'items' => 'array',
             'total_harga' => 'decimal:2',
             'jadwal_kirim' => 'date',
             'start_date' => 'date',
             'end_date' => 'date',
+            'payment_due_date' => 'date',
             'waktu_acc' => 'datetime',
         ];
     }
